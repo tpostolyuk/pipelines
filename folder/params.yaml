@@ -1,12 +1,16 @@
 arguments:
   parameters:
-    - name: step-B-message
-      value: hello
     - name: step-C-message
-      value: world
-    - name: step-D-message
-      value: message
+      value: hello
     - name: step-E-message
       value: some
-    - name: step-F-message
-      value: value
+    - name: step-E-name
+      value: name
+    - name: step-E-version
+      value: 1.12
+    - name: step-E-message
+      value: world
+    - name: step-E-name
+      value: john
+    - name: step-E-version
+      value: 1.1.1
