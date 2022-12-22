@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: pipe-name-
+  generateName: test-pipe-
 spec:
   entrypoint: entry
   templates:
@@ -10,49 +10,53 @@ spec:
       tasks:
       - name: step-A
         templateRef:
-          name: root-step
-          template: suspend
+          name: test-template
+          template: suspend-name
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.step-A-message}}"
       - name: step-B
         templateRef:
-          name: whalesay
+          name: whalesay-with-params
           template: whalesay-template
         dependencies: [step-A]
         arguments:
           parameters:
           - name: message
             value: "{{workflow.parameters.step-B-message}}"
+          - name: name
+            value: "{{workflow.parameters.step-B-name}}"
+          - name: version
+            value: "{{workflow.parameters.step-B-version}}"
       - name: step-C
+        templateRef:
+          name: root-step
+          template: suspend
+        dependencies: [step-B]
+      - name: step-D
         templateRef:
           name: whalesay
           template: whalesay-template
-        dependencies: [step-A]
+        dependencies: [step-C]
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.step-C-message}}"
-      - name: step-D
-        templateRef:
-          name: maintenance-step
-          template: maintenance-mode
-        dependencies: [step-C]
+            value: "{{workflow.parameters.step-D-message}}"
       - name: step-E
         templateRef:
-          name: whalesay-with-params
-          template: whalesay-template
-        dependencies: [step-C]
+          name: test-template
+          template: suspend-name
+        dependencies: [step-D]
         arguments:
           parameters:
           - name: message
             value: "{{workflow.parameters.step-E-message}}"
-          - name: name
-            value: "{{workflow.parameters.step-E-name}}"
-          - name: version
-            value: "{{workflow.parameters.step-E-version}}"
       - name: step-G
         templateRef:
           name: whalesay-with-params
           template: whalesay-template
-        dependencies: [step-B]
+        dependencies: [step-D]
         arguments:
           parameters:
           - name: message
