@@ -10,13 +10,33 @@ spec:
       tasks:
       - name: step-A
         templateRef:
-          name: whalesay
-          template: whalesay-template
+          name: maintenance-step
+          template: maintenance-mode
+      - name: step-B
+        templateRef:
+          name: root-step
+          template: suspend
+        dependencies: [step-A]
+      - name: step-C
+        templateRef:
+          name: argocd-sync
+          template: argocd-sync-and-wait
+        dependencies: [step-A]
         arguments:
           parameters:
-          - name: message
-            value: "{{workflow.parameters.step-A-message}}"
-      - name: step-B
+          - name: argocd-version
+            value: "{{workflow.parameters.step-C-argocd-version}}"
+          - name: application-name
+            value: "{{workflow.parameters.step-C-application-name}}"
+          - name: revision
+            value: "{{workflow.parameters.step-C-revision}}"
+          - name: flags
+            value: "{{workflow.parameters.step-C-flags}}"
+          - name: argocd-server-address
+            value: "{{workflow.parameters.step-C-argocd-server-address}}"
+          - name: argocd-credentials-secret
+            value: "{{workflow.parameters.step-C-argocd-credentials-secret}}"
+      - name: step-D
         templateRef:
           name: whalesay
           template: whalesay-template
@@ -24,4 +44,4 @@ spec:
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.step-B-message}}"
+            value: "{{workflow.parameters.step-D-message}}"
