@@ -1,4 +1,6 @@
 arguments:
   parameters:
-  - name: step-A-message
-    value: hello
+    - name: step-A-message
+      value: hello
+    - name: step-B-message
+      value: world
