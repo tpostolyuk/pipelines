@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: test
+  generateName: pipe-name-
 spec:
   entrypoint: entry
   templates:
@@ -10,9 +10,10 @@ spec:
       tasks:
       - name: step-A
         templateRef:
-          name: whalesay
-          template: whalesay-template
-        arguments:
-          parameters:
-          - name: message
-            value: '{{workflow.parameters.step-A-message}}'
+          name: maintenance-step
+          template: maintenance-mode
+      - name: step-B
+        templateRef:
+          name: root-step
+          template: suspend
+        dependencies: [step-A]
