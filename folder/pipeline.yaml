@@ -14,13 +14,9 @@ spec:
           template: suspend
       - name: step-B
         templateRef:
-          name: whalesay
-          template: whalesay-template
+          name: Select template
+          template: Select subtemplate
         dependencies: [step-A]
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.step-B-message}}"
       - name: step-C
         templateRef:
           name: whalesay
@@ -32,33 +28,32 @@ spec:
             value: "{{workflow.parameters.step-C-message}}"
       - name: step-D
         templateRef:
-          name: whalesay
-          template: whalesay-template
-        dependencies: [step-A]
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.step-D-message}}"
+          name: maintenance-step
+          template: maintenance-mode
+        dependencies: [step-C]
       - name: step-E
         templateRef:
-          name: whalesay
+          name: whalesay-with-params
           template: whalesay-template
-        dependencies: [step-A]
+        dependencies: [step-C]
         arguments:
           parameters:
           - name: message
             value: "{{workflow.parameters.step-E-message}}"
-      - name: step-F
+          - name: name
+            value: "{{workflow.parameters.step-E-name}}"
+          - name: version
+            value: "{{workflow.parameters.step-E-version}}"
+      - name: step-E
         templateRef:
-          name: whalesay
+          name: whalesay-with-params
           template: whalesay-template
-        dependencies: [step-A]
+        dependencies: [step-B]
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.step-F-message}}"
-      - name: step-G
-        templateRef:
-          name: maintenance-step
-          template: maintenance-mode
-        dependencies: [step-D]
+            value: "{{workflow.parameters.step-E-message}}"
+          - name: name
+            value: "{{workflow.parameters.step-E-name}}"
+          - name: version
+            value: "{{workflow.parameters.step-E-version}}"
