@@ -1,6 +1,16 @@
 arguments:
   parameters:
-    - name: step-A-message
+    - name: step-C-argocd-version
+      value: v1.6.0
+    - name: step-C-application-name
+      value: name
+    - name: step-C-revision
+      value: revision
+    - name: step-C-flags
+      value: --
+    - name: step-C-argocd-server-address
+      value: 128.1.1
+    - name: step-C-argocd-credentials-secret
+      value: argocd-user
+    - name: step-D-message
       value: hello
-    - name: step-B-message
-      value: world
