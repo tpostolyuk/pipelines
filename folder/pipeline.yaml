@@ -10,10 +10,18 @@ spec:
       tasks:
       - name: step-A
         templateRef:
-          name: maintenance-step
-          template: maintenance-mode
+          name: whalesay
+          template: whalesay-template
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.step-A-message}}"
       - name: step-B
         templateRef:
-          name: root-step
-          template: suspend
+          name: whalesay
+          template: whalesay-template
         dependencies: [step-A]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.step-B-message}}"
