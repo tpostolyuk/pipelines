@@ -14,9 +14,13 @@ spec:
           template: suspend
       - name: step-B
         templateRef:
-          name: Select template
-          template: Select subtemplate
+          name: whalesay
+          template: whalesay-template
         dependencies: [step-A]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.step-B-message}}"
       - name: step-C
         templateRef:
           name: whalesay
@@ -44,7 +48,7 @@ spec:
             value: "{{workflow.parameters.step-E-name}}"
           - name: version
             value: "{{workflow.parameters.step-E-version}}"
-      - name: step-E
+      - name: step-G
         templateRef:
           name: whalesay-with-params
           template: whalesay-template
@@ -52,8 +56,8 @@ spec:
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.step-E-message}}"
+            value: "{{workflow.parameters.step-G-message}}"
           - name: name
-            value: "{{workflow.parameters.step-E-name}}"
+            value: "{{workflow.parameters.step-G-name}}"
           - name: version
-            value: "{{workflow.parameters.step-E-version}}"
+            value: "{{workflow.parameters.step-G-version}}"
