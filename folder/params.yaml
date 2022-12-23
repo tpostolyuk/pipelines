@@ -1,20 +1,4 @@
 arguments:
   parameters:
-    - name: step-A-message
-      value: hello
     - name: step-B-message
       value: hello
-    - name: step-B-name
-      value: world
-    - name: step-B-version
-      value: a
-    - name: step-D-message
-      value: ee
-    - name: step-E-message
-      value: hello
-    - name: step-G-message
-      value: ee
-    - name: step-G-name
-      value: qq
-    - name: step-G-version
-      value: zz
