@@ -1695,17 +1695,15 @@ spec:
         - server
         - --namespaced
         - --auth-mode
-        - server
-        - --auth-mode
         - client
         - --access-control-allow-origin
-        - localhost:8081
+        - https://localhost:8081
         env: []
         image: docker.io/greenopsinc/argo-server:3.3.8
         name: argo-server
         env:
         - name: FRAME_ANCESTOR
-          value: "localhost:8081"
+          value: "https://localhost:8081"
         ports:
         - containerPort: 2746
           name: web
