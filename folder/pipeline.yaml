@@ -1,58 +1,41 @@
+# This example demonstrates the use of a suspend template. Suspend templates allow a workflow to
+# enter a suspended state at a predetermined point in time in the workflow. Some use cases for this
+# might include: human approval during release process, performing asynchronous/long soak tests,
+# manual judgment of a staging environment before deploying to production. To run this example,
+# submit the workflow and wait until the workflow reaches the second, "approve" step, at which point
+# the workflow will be suspended. To resume the workflow, run:
+# argo resume <workflowname>
+# A suspended template can also be specified with `duration` which will automatically resume the
+# suspended template after the specified amount of time in seconds. In this example it is used to delay
+# a release after an approval.
+
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: 
+  generateName: suspend-template-
 spec:
-  entrypoint: entry
+  entrypoint: suspend
   templates:
-  - name: entry
-    dag:
-      tasks:
-      - name: step-A
-        templateRef:
-          name: argocd-sync-output
-          template: argocd-sync-and-wait
-        arguments:
-          parameters:
-          - name: argocd-version
-            value: "{{workflow.parameters.step-A-argocd-version}}"
-          - name: application-name
-            value: "{{workflow.parameters.step-A-application-name}}"
-          - name: revision
-            value: "{{workflow.parameters.step-A-revision}}"
-          - name: flags
-            value: "{{workflow.parameters.step-A-flags}}"
-          - name: argocd-server-address
-            value: "{{workflow.parameters.step-A-argocd-server-address}}"
-          - name: argocd-credentials-secret
-            value: "{{workflow.parameters.step-A-argocd-credentials-secret}}"
-      - name: step-B
-        templateRef:
-          name: whalesay-with-params1
-          template: another-whalesay
-        dependencies: [step-A]
-        arguments:
-          parameters:
-          - name: test
-            value: "{{workflow.parameters.step-B-test}}"
-          - name: surname
-            value: "{{tasks.step-B.outputs.parameters.surname}}"
-      - name: step-C
-        templateRef:
-          name: whalesay-with-params1
-          template: whalesay-template
-        dependencies: [step-A]
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.step-C-message}}"
-          - name: name
-            value: "{{workflow.parameters.step-C-name}}"
-          - name: version
-            value: "{{workflow.parameters.step-C-version}}"
-      - name: step-D
-        templateRef:
-          name: root-step1
-          template: suspend
-        dependencies: [step-B]
-        arguments:
+  - name: suspend
+    steps:
+    - - name: build
+        template: whalesay
+    - - name: approve
+        template: approve
+    - - name: delay
+        template: delay
+    - - name: release
+        template: whalesay
+
+  - name: approve
+    suspend: {}
+
+  - name: delay
+    suspend:
+      duration: "20"    # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+
+  - name: whalesay
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["hello world"]
