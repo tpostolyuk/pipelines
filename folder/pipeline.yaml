@@ -10,10 +10,36 @@ spec:
       tasks:
       - name: A
         templateRef:
-          name: coinflip
-          template: coinflip
+          name: echo
+          template: echo
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.A-message}}"
       - name: B
         templateRef:
-          name: maintenance-step
-          template: maintenance-mode
+          name: echo
+          template: echo
         dependencies: [A]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.B-message}}"
+      - name: C
+        templateRef:
+          name: echo
+          template: echo
+        dependencies: [A]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.C-message}}"
+      - name: D
+        templateRef:
+          name: echo
+          template: echo
+        dependencies: [C, B]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.D-message}}"
