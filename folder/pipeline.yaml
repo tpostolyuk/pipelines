@@ -10,8 +10,8 @@ spec:
       tasks:
       - name: A
         templateRef:
-          name: sleep-n-sec
-          template: sleep-n-sec
+          name: echo
+          template: echo
         arguments:
           parameters:
           - name: message
