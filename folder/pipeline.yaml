@@ -42,4 +42,27 @@ spec:
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.D-message}}"
+            value: "{{workflow.parameters.D-message}}"apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: 
+spec:
+  entrypoint: entry
+  templates:
+  - name: entry
+    dag:
+      tasks:
+      - name: A
+        templateRef:
+          name: argosay
+          template: argosay
+      - name: B
+        templateRef:
+          name: argosay
+          template: argosay
+        dependencies: [A]
+      - name: C
+        templateRef:
+          name: argosay
+          template: argosay
+        dependencies: [A]
