@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: 
+  generateName: dag-diamond-
 spec:
   entrypoint: entry
   templates:
@@ -10,8 +10,8 @@ spec:
       tasks:
       - name: A
         templateRef:
-          name: echo
-          template: echo
+          name: sleep-n-sec
+          template: sleep-n-sec
         arguments:
           parameters:
           - name: message
@@ -38,7 +38,7 @@ spec:
         templateRef:
           name: echo
           template: echo
-        dependencies: [C, B]
+        dependencies: [B, C]
         arguments:
           parameters:
           - name: message
