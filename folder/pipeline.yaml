@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: argosay-
+  generateName: 
 spec:
   entrypoint: entry
   templates:
@@ -10,15 +10,20 @@ spec:
       tasks:
       - name: A
         templateRef:
-          name: argosay
-          template: argosay
+          name: gen-number-list
+          template: gen-number-list
       - name: B
         templateRef:
-          name: argosay
-          template: argosay
+          name: maintenance-step
+          template: maintenance-mode
         dependencies: [A]
       - name: C
         templateRef:
-          name: argosay
-          template: argosay
+          name: coinflip
+          template: coinflip
         dependencies: [A]
+      - name: D
+        templateRef:
+          name: tails
+          template: tails
+        dependencies: [B, C]
