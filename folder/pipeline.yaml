@@ -1,26 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: coinflip-
+  generateName: 
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: flip-coin
+      - name: step-A
         templateRef:
-          name: coinflip
-          template: coinflip
-      - name: heads
+          name: gen-number-list
+          template: gen-number-list
+      - name: step-B
         templateRef:
-          name: heads
-          template: heads
-        when: "{{steps.flip-coin.outputs.result}} == heads"
-        dependencies: [flip-coin]
-      - name: tails
+          name: echo
+          template: print-message
+        dependencies: [step-A]
+        arguments:
+          parameters:
+          - name: message
+            value: "{{workflow.parameters.step-B-message}}"
+      - name: step-C
         templateRef:
-          name: tails
-          template: tails
-        dependencies: [heads]
-        when: "{{steps.flip-coin.outputs.result}} == tails"
+          name: argosay
+          template: argosay
+        dependencies: [step-A]
+      - name: step-D
+        templateRef:
+          name: maintenance-step
+          template: maintenance-mode
+        dependencies: [step-B, step-C]
