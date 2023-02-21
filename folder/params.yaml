@@ -1,16 +1,4 @@
 arguments:
   parameters:
-    - name: A-argocd-version
-      value: v2.0.5
-    - name: A-application-name
-      value: ""
-    - name: A-revision
-      value: ""
-    - name: A-flags
-      value: --
-    - name: A-argocd-server-address
-      value: ""
-    - name: A-argocd-credentials-secret
-      value: argocd-user
-    - name: B-message
-      value: output-A/parameters/greenops-argocd-info
+    - name: C-message
+      value: go
