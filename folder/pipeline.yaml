@@ -1,33 +1,37 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: test-pipe-
+  generateName: 
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: step-A
+      - name: A
         templateRef:
-          name: gen-number-list
-          template: gen-number-list
-      - name: step-B
+          name: argocd-step
+          template: argocd-sync-and-wait
+        arguments:
+          parameters:
+          - name: argocd-version
+            value: "{{workflow.parameters.A-argocd-version}}"
+          - name: application-name
+            value: "{{workflow.parameters.A-application-name}}"
+          - name: revision
+            value: "{{workflow.parameters.A-revision}}"
+          - name: flags
+            value: "{{workflow.parameters.A-flags}}"
+          - name: argocd-server-address
+            value: "{{workflow.parameters.A-argocd-server-address}}"
+          - name: argocd-credentials-secret
+            value: "{{workflow.parameters.A-argocd-credentials-secret}}"
+      - name: B
         templateRef:
           name: echo
           template: print-message
-        dependencies: [step-A]
+        dependencies: [A]
         arguments:
           parameters:
           - name: message
-            value: "{{workflow.parameters.step-B-message}}"
-      - name: step-C
-        templateRef:
-          name: argosay
-          template: argosay
-        dependencies: [step-A]
-      - name: step-D
-        templateRef:
-          name: maintenance-step
-          template: maintenance-mode
-        dependencies: [step-B, step-C]
+            value: "{{tasks.A.outputs.parameters.greenops-argocd-info}}"
