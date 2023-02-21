@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: 
+  generateName: test-pipe-
 spec:
   entrypoint: entry
   templates:
