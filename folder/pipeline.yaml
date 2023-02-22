@@ -1,14 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: sidecar-step-
+  generateName: daemon-nginx-
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: sidecar-step
+      - name: nginx-server
         templateRef:
-          name: sidecar
-          template: sidecar-example
+          name: nginx-server
+          template: nginx-server
+      - name: nginx-client
+        templateRef:
+          name: nginx-client
+          template: nginx-client
+        dependencies: [nginx-server]
+        arguments:
+          parameters:
+          - name: server-ip
+            value: "{{workflow.parameters.nginx-client-server-ip}}"
