@@ -16,7 +16,7 @@ spec:
         templateRef:
           name: random-fail
           template: random-fail
-        dependencies: [rand-fail-dag]
+        dependencies: [A]
       - name: C
         templateRef:
           name: random-fail
