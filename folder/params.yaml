@@ -1,8 +1,8 @@
 arguments:
   parameters:
     - name: A-timeout
-      value: 10s
+      value: 20s
     - name: B-timeout
-      value: 5s
+      value: 10s
     - name: C-timeout
-      value: 15s
+      value: 20s
