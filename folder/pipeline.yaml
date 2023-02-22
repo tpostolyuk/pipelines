@@ -1,27 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: conditionals-
+  generateName: coinflip-recursive-
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: print-hello-govaluate
+      - name: flip-coin
         templateRef:
-          name: argosay
-          template: argosay
-          when: "{{inputs.parameters.should-print}} == true" # govaluate form
-      - name: print-hello-expr
+          name: coinflip
+          template: coinflip
+      - name: heads
         templateRef:
-          name: argosay
-          template: argosay
-        when: "{{= inputs.parameters[\"should-print\"] == 'true'}}"
-        dependencies: [print-hello-govaluate]
-      - name: print-hello-expr-json
+          name: heads
+          template: heads
+        dependencies: [flip-coin]
+      - name: tails
         templateRef:
-          name: argosay
-          template: argosay
-        when: "{{=jsonpath(workflow.parameters.json, '$[0].value') == 'true'}}"
-        dependencies: [print-hello-expr]
+          name: tails
+          template: tails
+        dependencies: [flip-coin]
