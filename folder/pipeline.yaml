@@ -1,44 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: dag-multiroot-
+  generateName: 
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: A
+      - name: step-forever
         templateRef:
-          name: echo
-          template: print-message
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.A-message}}"
-      - name: B
-        templateRef:
-          name: echo
-          template: print-message
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.B-message}}"
-      - name: C
-        templateRef:
-          name: echo
-          template: print-message
-        dependencies: [A]
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.C-message}}"
-      - name: D
-        templateRef:
-          name: echo
-          template: print-message
-        dependencies: [A, B]
-        arguments:
-          parameters:
-          - name: message
-            value: "{{workflow.parameters.D-message}}"
+          name: forever
+          template: forever
