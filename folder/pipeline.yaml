@@ -1,14 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: step-forever-
+  generateName: random-fail-
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: step-forever
+      - name: A
         templateRef:
-          name: forever
-          template: forever
+          name: random-fail
+          template: random-fail
+      - name: B
+        templateRef:
+          name: random-fail
+          template: random-fail
+        dependencies: [rand-fail-dag]
+      - name: C
+        templateRef:
+          name: random-fail
+          template: random-fail
+        dependencies: [A, D]
+      - name: D
+        templateRef:
+          name: random-fail
+          template: random-fail
+        dependencies: [A]
