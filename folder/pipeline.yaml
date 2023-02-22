@@ -1,14 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: forever-
+  generateName: conditionals-
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: step-A
+      - name: print-hello-govaluate
         templateRef:
-          name: forever
-          template: forever
+          name: argosay
+          template: argosay
+          when: "{{inputs.parameters.should-print}} == true" # govaluate form
+      - name: print-hello-expr
+        templateRef:
+          name: argosay
+          template: argosay
+        when: "{{= inputs.parameters[\"should-print\"] == 'true'}}"
+        dependencies: [print-hello-govaluate]
+      - name: print-hello-expr-json
+        templateRef:
+          name: argosay
+          template: argosay
+        when: "{{=jsonpath(workflow.parameters.json, '$[0].value') == 'true'}}"
+        dependencies: [print-hello-expr]
