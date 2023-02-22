@@ -16,9 +16,11 @@ spec:
         templateRef:
           name: heads
           template: heads
+        when: "{{steps.flip-coin.outputs.result}} == heads"
         dependencies: [flip-coin]
       - name: tails
         templateRef:
           name: tails
           template: tails
+        when: "{{steps.flip-coin.outputs.result}} == tails"
         dependencies: [flip-coin]
