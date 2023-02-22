@@ -1,4 +1,8 @@
 arguments:
   parameters:
-    - name: nginx-client-server-ip
-      value: localhost
+    - name: A-timeout
+      value: 10s
+    - name: B-timeout
+      value: 5s
+    - name: C-timeout
+      value: 15s
