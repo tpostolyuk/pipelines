@@ -1,4 +1,10 @@
 arguments:
   parameters:
+    - name: A-message
+      value: A
+    - name: B-message
+      value: B
     - name: C-message
-      value: go
+      value: C
+    - name: D-message
+      value: D
