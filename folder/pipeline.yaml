@@ -1,29 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: random-fail-
+  generateName: 
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: A
+      - name: sidecar-step
         templateRef:
-          name: random-fail
-          template: random-fail
-      - name: B
-        templateRef:
-          name: random-fail
-          template: random-fail
-        dependencies: [A]
-      - name: C
-        templateRef:
-          name: random-fail
-          template: random-fail
-        dependencies: [A, D]
-      - name: D
-        templateRef:
-          name: random-fail
-          template: random-fail
-        dependencies: [A]
+          name: sidecar
+          template: sidecar-example
