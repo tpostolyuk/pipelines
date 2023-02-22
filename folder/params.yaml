@@ -1,4 +1,4 @@
 arguments:
   parameters:
     - name: nginx-client-server-ip
-      value: {{steps.nginx-server.ip}}
+      value: localhost
