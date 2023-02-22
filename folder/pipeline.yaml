@@ -1,14 +1,59 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: colored-logs-
+  generateName: dag-daemon-task-
 spec:
   entrypoint: entry
   templates:
   - name: entry
     dag:
       tasks:
-      - name: colored-step
+      - name: influx
         templateRef:
-          name: colored-logs
-          template: colored
+          name: influxdb
+          template: influxdb
+      - name: init-database
+        templateRef:
+          name: influxdb-client
+          template: influxdb-client
+        dependencies: [influx]
+        arguments:
+          parameters:
+          - name: cmd
+            value: "{{workflow.parameters.init-database-cmd}}"
+      - name: producer-1
+        templateRef:
+          name: influxdb-client
+          template: influxdb-client
+        dependencies: [init-database]
+        arguments:
+          parameters:
+          - name: cmd
+            value: "{{workflow.parameters.producer-1-cmd}}"
+      - name: producer-2
+        templateRef:
+          name: influxdb-client
+          template: influxdb-client
+        dependencies: [init-database]
+        arguments:
+          parameters:
+          - name: cmd
+            value: "{{workflow.parameters.producer-2-cmd}}"
+      - name: producer-3
+        templateRef:
+          name: influxdb-client
+          template: influxdb-client
+        dependencies: [init-database]
+        arguments:
+          parameters:
+          - name: cmd
+            value: "{{workflow.parameters.producer-3-cmd}}"
+      - name: consumer
+        templateRef:
+          name: influxdb-client
+          template: influxdb-client
+        dependencies: [producer-1, producer-2, producer-3]
+        arguments:
+          parameters:
+          - name: cmd
+            value: "{{workflow.parameters.consumer-cmd}}"
